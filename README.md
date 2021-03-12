@@ -1,21 +1,11 @@
 # im
-用go语言实现的im服务，基于websocket通讯
+用go语言实现的im服务，基于websocket通信
 
 ## 部署
 
 ```
 go mod init openim
-
+go run main.go
 ```
 
-
-开启web服务（为展示im页面）
-```
-go run webserver.go
-```
-
-开启socket服务
-```
-cd im
-go run *.go
-```
+访问http://127.0.0.1:8001/可以在示例页面进行测试
