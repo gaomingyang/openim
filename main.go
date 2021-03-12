@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"openim/im"
 )
 
-var addr = flag.String("addr", ":8001", "http service address")
+var http_addr = flag.String("http_addr", ":8001", "http service address")
 
 func main() {
 	flag.Parse()
@@ -19,15 +20,20 @@ func main() {
 	// 	PORT = ":" + arguments[1]
 	// }
 
-	fmt.Println("Start web server with port number", *addr)
+	//开启sockert server服务
+	go im.StartSocketServer()
+
+	log.Println("Start web server with port number", *http_addr)
 	http.HandleFunc("/test", test)
 	// http.Handle("/", http.FileServer(http.Dir("./public")))  //根目录指向public
 	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public")))) // /public指向 /public
+
+	//开启web 聊天页面
 	http.HandleFunc("/", home)
 
 	// err := http.ListenAndServe(PORT, nil)
 	//flag获取的addr是一个指针，对指针使用*进行取值
-	err := http.ListenAndServe(*addr, nil)
+	err := http.ListenAndServe(*http_addr, nil)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -38,7 +44,7 @@ func test(w http.ResponseWriter, r *http.Request) {
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Serving", r.Host, "for", r.URL.Path)
+	log.Println("Serving", r.Host, "for", r.URL.Path)
 	log.Println(r.URL)
 	if r.URL.Path != "/" {
 		http.Error(w, "Not found", http.StatusNotFound)

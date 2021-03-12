@@ -1,4 +1,4 @@
-package main
+package im
 
 import (
 	"flag"
@@ -8,15 +8,15 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-var addr = flag.String("addr", ":9001", "socket address")
+var socket_addr = flag.String("addr", ":9001", "socket address")
 
-func main() {
-	hub := newHub()
+func StartSocketServer() {
+	hub := NewHub()
 	go hub.run()
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serveWs(hub, w, r)
 	})
-	err := http.ListenAndServe(*addr, nil)
+	err := http.ListenAndServe(*socket_addr, nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
