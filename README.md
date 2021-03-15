@@ -5,7 +5,9 @@
 
 ```
 go mod init openim
-go run main.go
+go build -o openim main.go
+./openim
 ```
+测试可执行`go run main.go`
 
 访问http://127.0.0.1:8001/可以在示例页面进行测试

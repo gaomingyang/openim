@@ -24,9 +24,9 @@ func main() {
 	go im.StartSocketServer()
 
 	log.Println("Start web server with port number", *http_addr)
-	http.HandleFunc("/test", test)
+	http.HandleFunc("/version", version)
 	// http.Handle("/", http.FileServer(http.Dir("./public")))  //根目录指向public
-	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public")))) // /public指向 /public
+	http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))
 
 	//开启web 聊天页面
 	http.HandleFunc("/", home)
@@ -39,8 +39,8 @@ func main() {
 	}
 }
 
-func test(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "test")
+func version(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "0.0.1")
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
