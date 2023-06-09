@@ -18,6 +18,11 @@ type LoginRequest struct {
 	Password string `form:"password" json:"password" binding:"required"`
 }
 
+type LoginResponse struct {
+	Id       int64  `json:"id"`
+	UserName string `json:"user_name"`
+}
+
 // register
 func UserRegister(c *gin.Context) {
 	var register RegisterRequest
@@ -62,5 +67,10 @@ func UserLogin(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "success", "user": user})
+	resp := LoginResponse{
+		Id:       user.Id,
+		UserName: user.UserName,
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "success", "user": resp})
 }
