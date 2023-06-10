@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"log"
 	"net/http"
 	"openim/config"
@@ -14,7 +15,7 @@ import (
 	"os"
 )
 
-var http_addr = flag.String("http_addr", ":8001", "http service address")
+// var http_addr = flag.String("http_addr", ":8001", "http service address")
 
 func init() {
 	log.SetPrefix("[LOG] ")
@@ -49,7 +50,7 @@ func main() {
 	r.POST("/register", services.UserRegister)
 	r.POST("/login", services.UserLogin)
 	r.GET("/", indexPage)
-	r.Run(":8888") // listen and serve on 0.0.0.0:8080
+	r.Run(viper.GetString("apiPort")) // listen and serve on 0.0.0.0:8080
 
 	// log.Println("Start web server with port number", *http_addr)
 	// http.HandleFunc("/version", version)

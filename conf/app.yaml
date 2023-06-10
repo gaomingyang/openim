@@ -1,5 +1,7 @@
 #本websocket节点监听地址
-wsListenPort: ":8800"
+wsPort: ":8899"
+
+apiPort: ":8888"
 
 #是否开启ws接口验签 true/false
 checkSign: false

@@ -1,22 +1,22 @@
 package im
 
 import (
-	"flag"
+	"github.com/spf13/viper"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
 )
 
-var socket_addr = flag.String("addr", ":9001", "socket address")
-
 func StartSocketServer() {
 	hub := NewHub()
-	go hub.run()
+	go hub.run() // 死循环
+	// 接收连接请求
 	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
 		serveWs(hub, w, r)
 	})
-	err := http.ListenAndServe(*socket_addr, nil)
+	log.Println("ws port:", viper.GetString("wsPort"))
+	err := http.ListenAndServe(viper.GetString("wsPort"), nil)
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
@@ -30,22 +30,27 @@ func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 	// 	}
 	// }
 	var upgrader = websocket.Upgrader{
+		ReadBufferSize:  1024,
+		WriteBufferSize: 1024,
 		// 解决跨域问题
 		CheckOrigin: func(r *http.Request) bool {
 			return true
 		},
 	}
 	conn, err := upgrader.Upgrade(w, r, nil)
-
 	if err != nil {
 		log.Println(err)
 		return
 	}
-	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
+
+	// 每一个连接一个client实例
+	client := &Client{
+		hub:  hub,
+		conn: conn,
+		send: make(chan []byte, 256),
+	}
 	client.hub.register <- client
 
-	// Allow collection of memory referenced by the caller by doing all work in
-	// new goroutines.
-	go client.writePump()
-	go client.readPump()
+	go client.writeProgress()
+	go client.readProgress()
 }

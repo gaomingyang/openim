@@ -1,7 +1,6 @@
 package im
 
-// Hub maintains the set of active clients and broadcasts messages to the
-// clients.
+// Hub maintains the set of active clients and broadcasts messages to the clients.
 type Hub struct {
 	// Registered clients.
 	clients map[*Client]bool
@@ -28,14 +27,14 @@ func NewHub() *Hub {
 func (h *Hub) run() {
 	for {
 		select {
-		case client := <-h.register: //接入
+		case client := <-h.register: // 接入
 			h.clients[client] = true
-		case client := <-h.unregister: //断开
+		case client := <-h.unregister: // 断开
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client)
 				close(client.send)
 			}
-		case message := <-h.broadcast: //广播
+		case message := <-h.broadcast: // 广播
 			for client := range h.clients {
 				select {
 				case client.send <- message:
