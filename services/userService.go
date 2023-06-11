@@ -61,6 +61,10 @@ func UserLogin(c *gin.Context) {
 	user, err := dao.UserLogin(login.UserName, login.Password)
 	log.Println("user:")
 	log.Printf("%+v\n", user)
+	if user.Id == 0 {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "user not found"})
+		return
+	}
 	if err != nil {
 		log.Println("login Error", err.Error())
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "login error"})

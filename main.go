@@ -10,8 +10,8 @@ import (
 	"net/http"
 	"openim/config"
 	"openim/dao"
-	"openim/im"
 	"openim/services"
+	"openim/ws"
 	"os"
 )
 
@@ -41,7 +41,8 @@ func main() {
 	// }
 
 	// 开启sockert server服务
-	go im.StartSocketServer()
+	// go im.StartSocketServer()
+	go ws.StartWsServer()
 
 	r := gin.Default()
 	corsMiddleWare := cors.Default()
