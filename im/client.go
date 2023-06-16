@@ -59,6 +59,9 @@ func (c *Client) readProgress() {
 			}
 			break
 		}
+
+		log.Println("received:", string(message))
+
 		message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
 		c.hub.broadcast <- message
 	}
@@ -85,6 +88,7 @@ func (c *Client) writeProgress() {
 			if err != nil {
 				return
 			}
+			log.Println("send:", string(message))
 			w.Write(message)
 
 			// Add queued chat messages to the current websocket message.
