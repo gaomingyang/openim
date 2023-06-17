@@ -9,12 +9,20 @@ import (
 	"openim/common"
 )
 
-var upgrader = websocket.Upgrader{} // use default options
+// var upgrader = websocket.Upgrader{} // use default options
+var upgrader = websocket.Upgrader{
+	ReadBufferSize:  1024,
+	WriteBufferSize: 1024,
+	// 解决跨域问题
+	CheckOrigin: func(r *http.Request) bool {
+		return true
+	},
+}
 
 func StartWsServer() {
-	http.HandleFunc("/socket", socketHandler)
+	http.HandleFunc("/ws", socketHandler)
 	port := viper.GetString("wsPort")
-	port = ":6666"
+	// port = ":6666"
 	log.Println("/socket at", port)
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
@@ -39,7 +47,7 @@ var Conns ConnMap
 
 func init() {
 	Conns = ConnMap{
-		Conn:      nil,
+		Conn:      make(map[string]*websocket.Conn),
 		WriteChan: make(chan []byte, 500),
 	}
 }
@@ -53,6 +61,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	connId := common.MakeUuid()
 	Conns.Conn[connId] = conn
+	log.Println("connid:", connId, "joined")
 
 	log.Printf("%+v\n", Conns)
 
@@ -61,15 +70,14 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		conn.Close()
 	}()
 
-	// write go routine
+	// write go routine, used to send message
 	go Write()
 
-	// The event loop
 	for {
 		messageType, messageBytes, err := conn.ReadMessage()
 		if err != nil {
 			log.Println("Error during message reading:", err)
-			// delete(connMap.Conn, conn)
+			delete(Conns.Conn, connId)
 			break
 		}
 		log.Println("msgTYPE:", messageType)
@@ -101,12 +109,12 @@ func Write() {
 		select {
 		case msg := <-Conns.WriteChan:
 			log.Println("channel get ", msg)
-			for _, conn := range Conns.Conn {
+			for k, conn := range Conns.Conn {
+				fmt.Println("send to", k, "msg:", string(msg))
 				err := conn.WriteMessage(websocket.TextMessage, msg)
 				if err != nil {
 					log.Println("write msg error", string(msg))
 				}
-				log.Println("send ")
 			}
 
 		}
