@@ -2,9 +2,12 @@ package common
 
 import (
 	"github.com/google/uuid"
+	"strings"
 )
 
 func MakeUuid() string {
 	id := uuid.New()
-	return id.String()
+	s := id.String()
+	s = strings.Replace(s, "-", "", 0)
+	return s
 }

@@ -1,12 +1,14 @@
 package ws
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/spf13/viper"
 	"log"
 	"net/http"
 	"openim/common"
+	"time"
 )
 
 // var upgrader = websocket.Upgrader{} // use default options
@@ -63,7 +65,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	Conns.Conn[connId] = conn
 	log.Println("connid:", connId, "joined")
 
-	log.Printf("%+v\n", Conns)
+	log.Printf("%+v\n", Conns.Conn)
 
 	defer func() {
 		log.Println("conn.Close()")
@@ -83,13 +85,10 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("msgTYPE:", messageType)
 		log.Printf("Received: %s\n", messageBytes)
 
-		// json parse message
-		// var msg Message
-		// err = json.Unmarshal(messageBytes, &msg)
-		// if err != nil {
-		// 	log.Println("Error during parse reading:", err)
-		// 	continue
-		// }
+		// 这里需要完善，ping的立即返回pong响应
+		if messageType == websocket.PingMessage || messageType == websocket.PongMessage {
+			continue
+		}
 
 		Conns.WriteChan <- messageBytes
 
@@ -105,15 +104,36 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 func Write() {
 	log.Println("go write process on")
+	ticker := time.NewTicker(30 * time.Second)
+	defer func() {
+		ticker.Stop()
+	}()
 	for {
 		select {
 		case msg := <-Conns.WriteChan:
-			log.Println("channel get ", msg)
+
+			// json parse message
+			var message Message
+			err := json.Unmarshal(msg, &message)
+			if err != nil {
+				log.Println("Error during parse reading:", err)
+			} else {
+				log.Println(message.UserName, "send to to all, content:", message.Content)
+			}
+
 			for k, conn := range Conns.Conn {
 				fmt.Println("send to", k, "msg:", string(msg))
 				err := conn.WriteMessage(websocket.TextMessage, msg)
 				if err != nil {
-					log.Println("write msg error", string(msg))
+					log.Println("write to", k, " msg error,msg:", string(msg), " err:", err.Error())
+				}
+			}
+		case <-ticker.C:
+			for k, conn := range Conns.Conn {
+				conn.SetWriteDeadline(time.Now().Add(25 * time.Second))
+				if err := conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+					log.Println("send ping error to", k)
+					return
 				}
 			}
 
