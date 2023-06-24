@@ -69,6 +69,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 	defer func() {
 		log.Println("conn.Close()")
+		delete(Conns.Conn, connId)
 		conn.Close()
 	}()
 
@@ -79,13 +80,12 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		messageType, messageBytes, err := conn.ReadMessage()
 		if err != nil {
 			log.Println("Error during message reading:", err)
-			delete(Conns.Conn, connId)
 			break
 		}
 		log.Println("msgTYPE:", messageType)
 		log.Printf("Received: %s\n", messageBytes)
 
-		// 这里需要完善，ping的立即返回pong响应
+		// 这里需要完善，ping的立即返回pong响应 ping9 pong10
 		if messageType == websocket.PingMessage || messageType == websocket.PongMessage {
 			continue
 		}
@@ -116,26 +116,36 @@ func Write() {
 			var message Message
 			err := json.Unmarshal(msg, &message)
 			if err != nil {
-				log.Println("Error during parse reading:", err)
+				if string(msg) != "ping" {
+					log.Println("Error during parse reading:", err)
+				}
 			} else {
 				log.Println(message.UserName, "send to to all, content:", message.Content)
 			}
 
 			for k, conn := range Conns.Conn {
 				fmt.Println("send to", k, "msg:", string(msg))
-				err := conn.WriteMessage(websocket.TextMessage, msg)
+
+				msgType := websocket.TextMessage
+				if string(msg) == "ping" {
+					msgType = websocket.PingMessage
+				}
+				err := conn.WriteMessage(msgType, msg)
 				if err != nil {
 					log.Println("write to", k, " msg error,msg:", string(msg), " err:", err.Error())
 				}
 			}
 		case <-ticker.C:
-			for k, conn := range Conns.Conn {
-				conn.SetWriteDeadline(time.Now().Add(25 * time.Second))
-				if err := conn.WriteMessage(websocket.PingMessage, nil); err != nil {
-					log.Println("send ping error to", k)
-					return
-				}
-			}
+			Conns.WriteChan <- []byte("ping")
+			// for _, conn := range Conns.Conn {
+			// conn.SetWriteDeadline(time.Now().Add(25 * time.Second))
+			// if err := conn.WriteMessage(websocket.PingMessage, nil); err != nil {
+			// 	log.Println("send ping error to", k)
+			// 	log.Println("delete it from conns")
+			// 	delete(Conns.Conn, k)
+			// 	return
+			// }
+			// }
 
 		}
 	}
