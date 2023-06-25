@@ -2,6 +2,7 @@ package dao
 
 import (
 	"crypto/md5"
+	"errors"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"io"
@@ -29,7 +30,14 @@ func UserFindByName(userName string) (num int64, err error) {
 
 func UserLogin(userName string, password string) (user User, err error) {
 	md5Password := getMd5(password)
-	err = DBInstance.Table("users").Where("user_name = ? and password = ?", userName, md5Password).First(&user).Error
+	err = DBInstance.Table("users").Debug().Where("user_name = ?", userName).First(&user).Error
+	if err != nil {
+		return
+	}
+	if user.Password != md5Password {
+		err = errors.New("wrong password")
+		return
+	}
 	return
 }
 
