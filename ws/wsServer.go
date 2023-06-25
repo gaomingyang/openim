@@ -2,7 +2,6 @@ package ws
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gorilla/websocket"
 	"github.com/spf13/viper"
 	"log"
@@ -28,7 +27,7 @@ func StartWsServer() {
 	log.Println("/socket at", port)
 	err := http.ListenAndServe(port, nil)
 	if err != nil {
-		fmt.Println("ListenAndServe出错：", err.Error())
+		log.Println("ListenAndServe出错：", err.Error())
 	}
 }
 
@@ -61,9 +60,21 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		log.Print("Error during connection upgradation:", err)
 		return
 	}
-	connId := common.MakeUuid()
+
+	var connId string
+	// todo in the future ,this id parameter could be change to token or key string,which is a encryption string of unique user.
+	// get parameters
+	id := r.URL.Query().Get("id")
+	if id != "" {
+		log.Println("get parameter ws conn id:", id)
+		connId = id
+	} else {
+		connId = common.MakeUuid()
+	}
 	Conns.Conn[connId] = conn
 	log.Println("connid:", connId, "joined")
+
+	// in the future could consider send a message to notice this user is online
 
 	log.Printf("%+v\n", Conns.Conn)
 
@@ -74,7 +85,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	}()
 
 	// write go routine, used to send message
-	go Write()
+	go write()
 
 	for {
 		messageType, messageBytes, err := conn.ReadMessage()
@@ -102,7 +113,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Write() {
+func write() {
 	log.Println("go write process on")
 	ticker := time.NewTicker(30 * time.Second)
 	defer func() {
@@ -124,7 +135,7 @@ func Write() {
 			}
 
 			for k, conn := range Conns.Conn {
-				fmt.Println("send to", k, "msg:", string(msg))
+				log.Println("send to", k, "msg:", string(msg))
 
 				msgType := websocket.TextMessage
 				if string(msg) == "ping" {
@@ -149,4 +160,8 @@ func Write() {
 
 		}
 	}
+}
+
+func GetOnlineUserNumber() int {
+	return len(Conns.Conn)
 }

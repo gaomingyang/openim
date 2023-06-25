@@ -50,7 +50,9 @@ func main() {
 	r.GET("/ping", pong)
 	r.POST("/register", services.UserRegister)
 	r.POST("/login", services.UserLogin)
-	r.GET("/", indexPage)
+
+	r.LoadHTMLGlob("public/*")
+	r.GET("/manage", managePage)
 	r.Run(viper.GetString("apiPort")) // listen and serve on 0.0.0.0:8080
 
 	// log.Println("Start web server with port number", *http_addr)
@@ -70,6 +72,7 @@ func main() {
 }
 
 func pong(c *gin.Context) {
+	// c.String(200, "pong")
 	c.JSON(200, gin.H{"message": "pong"})
 }
 
@@ -91,7 +94,9 @@ func home(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, "./public/home.html")
 }
 
-func indexPage(c *gin.Context) {
-	// c.String(200, "Success")
-	c.HTML(http.StatusOK, "/public/home.html", nil)
+// todo this page could use ws update number instead of refresh webpage by hand
+func managePage(c *gin.Context) {
+	onlineUserNumber := ws.GetOnlineUserNumber()
+	log.Println("online UserNumber:", onlineUserNumber)
+	c.HTML(http.StatusOK, "manage.html", gin.H{"onlineUserNumber": onlineUserNumber})
 }
