@@ -96,7 +96,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("msgTYPE:", messageType)
 		log.Printf("Received: %s\n", messageBytes)
 
-		// 这里需要完善，ping的立即返回pong响应 ping9 pong10
+		// todo 这里需要完善，ping的立即返回pong响应 ping9 pong10
 		if messageType == websocket.PingMessage || messageType == websocket.PongMessage {
 			continue
 		}
