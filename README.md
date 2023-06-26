@@ -1,5 +1,5 @@
 # Open IM
-An Opensource Instance Message System.
+An Opensource Instant Messaging System.
 
 ## Deploy
 
