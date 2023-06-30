@@ -63,6 +63,8 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 	var connId string
 	// todo in the future ,this id parameter could be change to token or key string,which is a encryption string of unique user.
+	// connId should be get by an api, after user login,and has pair relation with userKey, for safety consideration
+
 	// get parameters
 	id := r.URL.Query().Get("id")
 	if id != "" {
@@ -88,6 +90,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 	go write()
 
 	for {
+		// get user send to server message
 		messageType, messageBytes, err := conn.ReadMessage()
 		if err != nil {
 			log.Println("Error during message reading:", err)
@@ -101,6 +104,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 			continue
 		}
 
+		// 收到的消息通过server的writeChan发送出去
 		Conns.WriteChan <- messageBytes
 
 		// resp := fmt.Sprintf("hi %s", message)
@@ -134,6 +138,7 @@ func write() {
 				log.Println(message.UserName, "send to to all, content:", message.Content)
 			}
 
+			// 这里是特殊逻辑，用户发的消息，群发给目前连接上来的所有人，后面可以改成指定组和指定人
 			for k, conn := range Conns.Conn {
 				log.Println("send to", k, "msg:", string(msg))
 
