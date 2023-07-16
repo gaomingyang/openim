@@ -48,8 +48,13 @@ func main() {
 	corsMiddleWare := cors.Default()
 	r.Use(corsMiddleWare)
 	r.GET("/ping", pong)
+
+	// apis
 	r.POST("/register", services.UserRegister)
 	r.POST("/login", services.UserLogin)
+
+	// about group
+	r.POST("/group/create", services.GroupCreate)
 
 	r.LoadHTMLGlob("public/*")
 	r.GET("/manage", managePage)

@@ -1,5 +1,6 @@
 # Open IM
-An Opensource Instant Messaging System.
+An Opensource Instant Messaging System.  
+You can deploy it privately to enhance communication security.
 
 ## Deploy
 
