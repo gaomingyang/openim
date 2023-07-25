@@ -53,8 +53,12 @@ func main() {
 	r.POST("/register", services.UserRegister)
 	r.POST("/login", services.UserLogin)
 
-	// about group
-	r.POST("/group/create", services.GroupCreate)
+	// group
+	r.GET("/group/info", services.GroupInfo)
+	r.GET("/group/members", services.GroupMembers)
+	r.POST("/group/create", services.CreateGroup)
+	r.POST("/group/join", services.JoinGroup)
+	r.POST("/group/quit", services.QuitGroup)
 
 	r.LoadHTMLGlob("public/*")
 	r.GET("/manage", managePage)
