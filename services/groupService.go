@@ -8,11 +8,19 @@ import (
 	"strings"
 )
 
+// get group infomation
 type GroupInfoRequest struct {
 	Id string `form:"id" json:"id" binding:"required"` // 长度最少1位
 }
+
+// create a new group
 type CreateGroupRequest struct {
 	GroupName string `form:"group_name" json:"group_name" binding:"required"` // 长度最少1位
+}
+
+// get group members infomation
+type GroupMembersRequest struct {
+	GroupId int `form:"group_id" json:"group_id" binding:"required"` // 长度最少1位
 }
 
 func GroupInfo(c *gin.Context) {
@@ -31,7 +39,18 @@ func GroupInfo(c *gin.Context) {
 }
 
 func GroupMembers(c *gin.Context) {
-
+	var request GroupMembersRequest
+	if err := c.ShouldBind(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
+		return
+	}
+	groupMembers, err := dao.GetGroupMembers(request.GroupId)
+	if err != nil {
+		log.Println("get group members err:", err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "get group members error"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success", "group_members": groupMembers})
 }
 
 func CreateGroup(c *gin.Context) {
