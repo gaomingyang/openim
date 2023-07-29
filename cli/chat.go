@@ -96,17 +96,16 @@ func (m chatModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 		case tea.KeyEnter:
 			msg := m.textarea.Value()
-			// m.messages = append(m.messages, m.senderStyle.Render(m.username+": ")+msg)
-			// m.viewport.SetContent(strings.Join(m.messages, "\n"))
-			m.textarea.Reset()
-			// m.viewport.GotoBottom()
+			if msg != "" {
+				m.textarea.Reset()
 
-			go func() {
-				m.sendCh <- ws.Message{
-					UserName: m.username,
-					Content:  msg,
-				}
-			}()
+				go func() {
+					m.sendCh <- ws.Message{
+						UserName: m.username,
+						Content:  msg,
+					}
+				}()
+			}
 		}
 	case ws.Message:
 		render := m.otherStyle
