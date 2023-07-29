@@ -63,6 +63,7 @@ func main() {
 	r.LoadHTMLGlob("public/*")
 	r.GET("/manage", managePage)
 	r.GET("/chat", chatPage)
+	r.GET("/login", loginPage)
 	r.Run(viper.GetString("apiPort")) // listen and serve on 0.0.0.0:8080
 
 	// log.Println("Start web server with port number", *http_addr)
@@ -112,5 +113,9 @@ func managePage(c *gin.Context) {
 }
 
 func chatPage(c *gin.Context) {
-	c.HTML(http.StatusOK, "chat.html", gin.H{"onlineUserNumber": 1})
+	c.HTML(http.StatusOK, "chat.html", nil)
+}
+
+func loginPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "login.html", nil)
 }
