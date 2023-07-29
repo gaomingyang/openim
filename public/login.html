@@ -85,10 +85,14 @@
                 localStorage.setItem("username", username);
                 // window.location.href="http://127.0.0.1:8888/chat?user_name="+username;
                 window.location.href="http://127.0.0.1:8888/chat";
-            }else{
-                alert("error"+data.message)
             }
         });
+        posting.fail(function(xhr,status,error){
+            console.log(xhr)
+            alert(xhr.responseJSON.message)
+            console.log(status)
+            console.log(error)
+        })
 
     }
 </script>
