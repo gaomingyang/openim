@@ -5,22 +5,39 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>im</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>openim-demo</title>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css">
 </head>
 <body>
-<div style="width:600px;margin:0 auto;border:1px solid #ccc;">
-    <div id="content" style="overflow-y:auto;height:300px;"></div>
-    <hr />
-    <div style="height:40px;">
-        <input type="text" class="form-control" id="user" placeholder="用户名" value="user1">
-        <input type="text" class="form-control" id="message"  placeholder="消息内容">
-        <button type="button" class="btn btn-primary" id="submit" onclick="sendMessage()">发送</button>
+<div class="container-fluid">
+    <h3 style="text-align: center;margin-top: 20px;">Open IM</h3>
+    <div style="width:600px;margin:20px auto;">
+        <p>Chat</p>
+        <div id="content" style="overflow-y:auto;height:300px;border:1px solid #ccc;"></div>
+        <br>
+
+        <div class="row">
+            <div class="col-md-3">
+                Name:<input type="text" class="form-control" id="user" placeholder="user name" value="Mingyang"> &nbsp;
+            </div>
+            <div class="col-md-9">
+                Message:<input type="text" class="form-control" id="message"  placeholder="Message content ">
+            </div>
+        </div>
+        <div class="row">
+            <div class="d-grid">
+                <button class="btn btn-primary" type="button" id="submit" onclick="sendMessage()">发送</button>
+            </div>
+        </div>
     </div>
 </div>
 
+
 <script type="text/javascript">
     if(window.WebSocket){
-        var webSocket = new WebSocket("ws://127.0.0.1:9502");
+        var webSocket = new WebSocket("ws://127.0.0.1:8899/ws");
         webSocket.onopen = function (event) {
             console.log('webSocket 连接成功');
         };
@@ -28,20 +45,29 @@
         //收到服务端消息回调
         webSocket.onmessage = function (event) {
             console.log("收到消息"+event.data);
+            const msg = JSON.parse(event.data);
+
             var content = document.getElementById('content');
-            content.innerHTML = content.innerHTML.concat('<p style="margin-left:20px;height:20px;line-height:20px;">'+event.data+'</p>');
+            content.innerHTML = content.innerHTML.concat('<p style="margin-left:20px;height:20px;line-height:20px;">'+msg.user_name+': '+msg.content+'</p>');
         }
 
         function sendMessage(){
             var user = document.getElementById('user').value;
             var message = document.getElementById('message').value;
+            if (message == "") {
+                alert("empty message!");
+                return
+            }
             // var data = user+"#"+message;
             var dataObj = {
-                user: user,
-                message: message,
+                user_name: user,
+                content: message,
             };
             var data =  JSON.stringify(dataObj)
             webSocket.send(data);
+            document.getElementById("message").value= "";
+            // $("#message").val("");
+
         }
 
         //回车发送
