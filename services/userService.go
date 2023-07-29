@@ -2,9 +2,11 @@ package services
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
+
 	"openim/dao"
 )
 
@@ -33,9 +35,14 @@ func UserRegister(c *gin.Context) {
 
 	// check same name
 	n, err := dao.UserFindByName(register.UserName)
+	if err != nil {
+		log.Printf("find user by name %q error: %v", register.UserName, err)
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "server error"})
+		return
+	}
 	fmt.Println("n:", n)
 	if n > 0 {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "repeat user name"})
+		c.JSON(http.StatusConflict, gin.H{"status": "conflict", "message": "user name exists!"})
 		return
 	}
 
