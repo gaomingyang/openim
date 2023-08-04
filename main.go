@@ -60,6 +60,9 @@ func main() {
 	r.POST("/group/join", services.JoinGroup)
 	r.POST("/group/quit", services.QuitGroup)
 
+	// friends
+	// r.GET("/my/friends")
+
 	r.LoadHTMLGlob("public/*")
 	r.GET("/manage", managePage)
 	r.GET("/chat", chatPage)
