@@ -34,13 +34,13 @@ func GroupList(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
 		return
 	}
-	group, err := dao.GroupList(request.UserId)
+	groups, err := dao.UserGroupList(request.UserId)
 	if err != nil {
 		log.Println("get group list err:", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "get group list error"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "success", "group": group})
+	c.JSON(http.StatusOK, gin.H{"status": "success", "groups": groups})
 }
 
 func GroupInfo(c *gin.Context) {
