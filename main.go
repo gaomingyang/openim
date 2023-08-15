@@ -54,9 +54,10 @@ func main() {
 	r.POST("/login", services.UserLogin)
 
 	// group
-	// 查看自己的组列表
-	r.GET("/group/list", services.GroupList)
-	r.GET("/group/info", services.GroupInfo)
+	r.GET("/groups", services.OpenGroups) // 所有开放的组列表
+
+	r.GET("/my/group/list", services.MyGroupList) // 查看自己的组列表
+	r.GET("/group/info", services.GroupInfo)      // 查看某个组的信息
 	r.GET("/group/members", services.GroupMembers)
 	r.POST("/group/create", services.CreateGroup)
 	r.POST("/group/join", services.JoinGroup)

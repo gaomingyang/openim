@@ -28,7 +28,17 @@ type GroupMembersRequest struct {
 	GroupId int `form:"group_id" json:"group_id" binding:"required"` // 长度最少1位
 }
 
-func GroupList(c *gin.Context) {
+// all open groups
+func OpenGroups(c *gin.Context) {
+	groups, err := dao.OpenGroups()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "get groups error"})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success", "groups": groups})
+}
+
+func MyGroupList(c *gin.Context) {
 	var request GroupListRequest
 	if err := c.ShouldBind(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})

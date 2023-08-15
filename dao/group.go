@@ -3,10 +3,19 @@ package dao
 type GroupId struct {
 	Id int64 `db:"id" json:"id"`
 }
+
 type Group struct {
 	Id        int64  `db:"id" json:"id"`
 	GroupName string `db:"group_name" json:"group_name"`
 	GroupInfo string `db:"group_info" json:"group_info"`
+	GroupType int    `db:"group_type" json:"group_type"`
+}
+
+// OpenGroups : groups which type is open
+func OpenGroups() (groups []Group, err error) {
+	groupsResult := DBInstance.Table("groups").Select("id,group_name,group_type,group_info").Where("group_type = ?", 1).Find(&groups)
+	err = groupsResult.Error
+	return
 }
 
 // UserGroupList : one user's groups list
