@@ -28,6 +28,12 @@ type GroupMembersRequest struct {
 	GroupId int `form:"group_id" json:"group_id" binding:"required"` // 长度最少1位
 }
 
+type ApplyToJoinGroupRequest struct {
+	GroupId int    `form:"group_id" json:"group_id" binding:"required"`
+	UserId  int    `form:"user_id" json:"user_id" binding:"required"`
+	Message string `form:"message" json:"message"`
+}
+
 // all open groups
 func OpenGroups(c *gin.Context) {
 	groups, err := dao.OpenGroups()
@@ -103,6 +109,17 @@ func CreateGroup(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "success", "group_id": groupId})
+}
+
+// apply to join a group
+func ApplyJoinGroup(c *gin.Context) {
+	var request ApplyToJoinGroupRequest
+	if err := c.ShouldBind(&request); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
+		return
+	}
+	// todo 创建申请记录，并给组管理员发送消息
+
 }
 
 func JoinGroup(c *gin.Context) {
