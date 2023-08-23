@@ -29,3 +29,13 @@ create table `user_groups` (
     primary key (`id`),
     unique key `idx_user_group` (`user_id`,`group_id`)
 ) engine = innodb default charset=utf8mb4 collate=utf8mb4_unicode_ci comment "user's groups";
+
+create table `group_join_requests` (
+    `id` int unsigned not null auto_increment,
+    `user_id` int unsigned not null default 0 comment "user id",
+    `group_id` int unsigned not null default 0 comment "group id",
+    `message` varchar(1024) not null default '' comment "optional message",
+    `created_at` datetime default current_timestamp,
+    primary key (`id`),
+    key `idx_user_group` (`user_id`,`group_id`)
+) engine = innodb default charset=utf8mb4 collate = utf8mb4_unicode_ci comment "group join requests";

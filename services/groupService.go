@@ -29,8 +29,8 @@ type GroupMembersRequest struct {
 }
 
 type ApplyToJoinGroupRequest struct {
-	GroupId int    `form:"group_id" json:"group_id" binding:"required"`
-	UserId  int    `form:"user_id" json:"user_id" binding:"required"`
+	GroupId int64  `form:"group_id" json:"group_id" binding:"required"`
+	UserId  int64  `form:"user_id" json:"user_id" binding:"required"`
 	Message string `form:"message" json:"message"`
 }
 
@@ -119,6 +119,11 @@ func ApplyJoinGroup(c *gin.Context) {
 		return
 	}
 	// todo 创建申请记录，并给组管理员发送消息
+	err := dao.ApplyJoinGroup(request.GroupId, request.UserId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "create group join info error"})
+		return
+	}
 
 }
 
