@@ -134,6 +134,10 @@ func ApplyJoinGroup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
+	if exist {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "you are in the group now"})
+		return
+	}
 
 	// 创建申请记录，并给组管理员发送消息
 	err = dao.ApplyJoinGroup(request.GroupId, request.UserId, request.Message)
