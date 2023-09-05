@@ -32,15 +32,15 @@ func UserGroupList(userId string) (groups []Group, err error) {
 	return
 }
 
-func GroupInfo(id string) (group Group, err error) {
-	err = DBInstance.Table("groups").First(&group, id).Error
+func GroupInfo(groupID int64) (group Group, err error) {
+	err = DBInstance.Table("groups").First(&group, groupID).Error
 	return
 }
 
-func GroupCreate(groupName string) (groupId int64, err error) {
+func GroupCreate(groupName string) (groupID int64, err error) {
 	group := Group{GroupName: groupName}
 	result := DBInstance.Create(&group)
-	groupId = group.Id
+	groupID = group.Id
 	err = result.Error
 	return
 }

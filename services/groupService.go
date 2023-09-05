@@ -15,7 +15,7 @@ type GroupListRequest struct {
 
 // get group infomation
 type GroupInfoRequest struct {
-	Id string `form:"id" json:"id" binding:"required"` // 长度最少1位
+	Id int64 `form:"id" json:"id" binding:"required"` // 长度最少1位
 }
 
 // create a new group
@@ -118,13 +118,33 @@ func ApplyJoinGroup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
 		return
 	}
-	// todo 创建申请记录，并给组管理员发送消息
-	err := dao.ApplyJoinGroup(request.GroupId, request.UserId)
+	// 检查身份，判断是否是开放群、本人是否不在群里
+	group, err := dao.GroupInfo(request.GroupId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+	if group.GroupType != 1 {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "group is not open!"})
+		return
+	}
+
+	exist, err := dao.CheckExistGroupMember(request.GroupId, request.UserId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
+		return
+	}
+
+	// 创建申请记录，并给组管理员发送消息
+	err = dao.ApplyJoinGroup(request.GroupId, request.UserId, request.Message)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "create group join info error"})
 		return
 	}
 
+	// TODO 给群管理员发送未读消息-管理员定义：当创建一个群时，自动就成为群的超级管理员。
+
+	c.JSON(http.StatusOK, gin.H{"status": "success", "message": "apply to join group success"})
 }
 
 func JoinGroup(c *gin.Context) {
