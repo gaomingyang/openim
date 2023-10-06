@@ -1,11 +1,13 @@
 package services
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"openim/common"
 	"openim/dao"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 // get user group List
@@ -38,10 +40,10 @@ type ApplyToJoinGroupRequest struct {
 func OpenGroups(c *gin.Context) {
 	groups, err := dao.OpenGroups()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "get groups error"})
+		common.InternalServerError(c, "get groups error")
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "success", "groups": groups})
+	common.OK(c, groups)
 }
 
 func MyGroupList(c *gin.Context) {
