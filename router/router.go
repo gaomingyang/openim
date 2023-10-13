@@ -18,7 +18,8 @@ func SetupRouter() *gin.Engine {
 	r.GET("/ping", pong)
 
 	// apis
-	r.POST("/register", services.UserRegister)
+	r.POST("/register", services.UserRegister) // 用户注册
+	// todo 检查邮箱是否重复的接口
 	r.POST("/login", services.UserLogin)
 
 	// group

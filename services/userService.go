@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"openim/common"
 
 	"github.com/gin-gonic/gin"
 
@@ -11,6 +12,7 @@ import (
 )
 
 type RegisterRequest struct {
+	// Email    string `form:"email" json:"email" binding:"required"` //后面加上
 	UserName string `form:"user_name" json:"user_name" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required"`
 }
@@ -25,11 +27,11 @@ type LoginResponse struct {
 	UserName string `json:"user_name"`
 }
 
-// register
+// 用户注册接口
 func UserRegister(c *gin.Context) {
 	var register RegisterRequest
 	if err := c.ShouldBind(&register); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
+		common.BadRequest(c, "parameters error")
 		return
 	}
 
@@ -37,7 +39,7 @@ func UserRegister(c *gin.Context) {
 	n, err := dao.UserFindByName(register.UserName)
 	if err != nil {
 		log.Printf("find user by name %q error: %v", register.UserName, err)
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "server error"})
+		common.InternalServerError(c, "server error")
 		return
 	}
 	fmt.Println("n:", n)
@@ -50,11 +52,11 @@ func UserRegister(c *gin.Context) {
 	err = dao.UserRegister(register.UserName, register.Password)
 	if err != nil {
 		log.Println("register Error", err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "register error"})
+		common.InternalServerError(c, "register error")
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "success"})
+	common.OK(c, nil)
 }
 
 // login

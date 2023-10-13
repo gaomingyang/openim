@@ -13,7 +13,7 @@ import (
 func MakeUuid() string {
 	id := uuid.New()
 	s := id.String()
-	s = strings.Replace(s, "-", "", 0)
+	s = strings.ReplaceAll(s, "-", "")
 	return s
 }
 
