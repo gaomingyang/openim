@@ -21,7 +21,9 @@ func SetupRouter() *gin.Engine {
 	// apis
 	api.POST("/register", services.UserRegister) // 用户注册
 	// todo 检查邮箱是否重复的接口
-	api.POST("/login", services.UserLogin) //用户登录接口
+	api.POST("/login", services.LoginHandler) //用户登录接口
+
+	// api.GET("/userinfo", services.UserInfoHandler)
 
 	// group
 	r.GET("/groups", services.OpenGroups)           // 查看所有开放的组列表

@@ -3,6 +3,10 @@ wsPort: ":8899"
 
 apiPort: ":8888"
 
+#和前端jwt通讯
+jwt:
+  secretKey: "Nalz5czLed"
+
 #是否开启ws接口验签 true/false
 checkSign: false
 

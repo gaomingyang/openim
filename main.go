@@ -42,5 +42,5 @@ func main() {
 	go ws.StartWsServer()
 
 	r := router.SetupRouter()
-	r.Run(viper.GetString("apiPort")) // listen and serve on 0.0.0.0:8080
+	log.Fatal(r.Run(viper.GetString("apiPort"))) // listen and serve on 0.0.0.0:8080
 }
