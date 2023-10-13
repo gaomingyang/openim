@@ -2,9 +2,11 @@ package services
 
 import (
 	"fmt"
+	"github.com/golang-jwt/jwt/v5"
 	"log"
 	"net/http"
 	"openim/common"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -25,6 +27,7 @@ type LoginRequest struct {
 type LoginResponse struct {
 	Id       int64  `json:"id"`
 	UserName string `json:"user_name"`
+	Token    string `json:"token"`
 }
 
 // 用户注册接口
@@ -63,19 +66,22 @@ func UserRegister(c *gin.Context) {
 func UserLogin(c *gin.Context) {
 	var login LoginRequest
 	if err := c.ShouldBind(&login); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
+		common.BadRequest(c, "parameters error")
+		// c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
 		return
 	}
 	log.Printf("login params:%+v\n", login)
 	user, err := dao.UserLogin(login.UserName, login.Password)
 	log.Printf("search user: %+v\n", user)
 	if user.Id == 0 {
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "user not found"})
+		common.BadRequest(c, "user not found")
+		// c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": "user not found"})
 		return
 	}
 	if err != nil {
 		log.Println("login Error", err.Error())
-		c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
+		common.BadRequest(c, err.Error())
+		// c.JSON(http.StatusInternalServerError, gin.H{"status": "error", "message": err.Error()})
 		return
 	}
 
@@ -83,6 +89,20 @@ func UserLogin(c *gin.Context) {
 		Id:       user.Id,
 		UserName: user.UserName,
 	}
+	param := jwt.MapClaims{
+		"exp":  time.After(1),
+		"data": resp,
+	}
+	token, _ := MakeToken(param)
+	resp.Token = token
 
-	c.JSON(http.StatusOK, gin.H{"status": "success", "user": resp})
+	common.OK(c, resp)
+	// c.JSON(http.StatusOK, gin.H{"status": "success", "user": resp})
+}
+
+func MakeToken(claims jwt.Claims) (token string, err error) {
+	key := "123"
+	t := jwt.NewWithClaims(jwt.SigningMethodES256, claims)
+	token, err = t.SignedString(key)
+	return
 }
