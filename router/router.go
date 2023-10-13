@@ -17,10 +17,11 @@ func SetupRouter() *gin.Engine {
 	r.Use(corsMiddleWare)
 	r.GET("/ping", pong)
 
+	api := r.Group("/api")
 	// apis
-	r.POST("/register", services.UserRegister) // 用户注册
+	api.POST("/register", services.UserRegister) // 用户注册
 	// todo 检查邮箱是否重复的接口
-	r.POST("/login", services.UserLogin)
+	api.POST("/login", services.UserLogin) //用户登录接口
 
 	// group
 	r.GET("/groups", services.OpenGroups)           // 查看所有开放的组列表
