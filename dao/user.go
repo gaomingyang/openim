@@ -1,10 +1,8 @@
 package dao
 
 import (
-	"crypto/md5"
 	"errors"
-	"fmt"
-	"io"
+	"openim/common"
 	"openim/common/define"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -18,7 +16,7 @@ type User struct {
 }
 
 func UserRegister(userName string, password string) (err error) {
-	md5Password := getMd5(password)
+	md5Password := common.GetMD5(password)
 	user := User{UserName: userName, Password: md5Password}
 	result := DBInstance.Create(&user)
 	err = result.Error
@@ -32,7 +30,7 @@ func UserFindByName(userName string) (num int64, err error) {
 }
 
 func UserLogin(userName string, password string) (user User, err error) {
-	md5Password := getMd5(password)
+	md5Password := common.GetMD5(password)
 	err = DBInstance.Table("users").Select("id", "user_name", "password", "status").Where("user_name = ?", userName).First(&user).Error
 	if err != nil {
 		return
@@ -48,11 +46,4 @@ func UserLogin(userName string, password string) (user User, err error) {
 		return
 	}
 	return
-}
-
-func getMd5(inputStr string) string {
-	h := md5.New()
-	io.WriteString(h, inputStr)
-	md5Str := fmt.Sprintf("%x", h.Sum(nil))
-	return md5Str
 }

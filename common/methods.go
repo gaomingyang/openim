@@ -1,6 +1,9 @@
 package common
 
 import (
+	"crypto/md5"
+	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"openim/common/define"
@@ -28,6 +31,10 @@ func BadRequest(c *gin.Context, message string) {
 	CommonJSON(c, http.StatusBadRequest, message)
 }
 
+func Unauthorized(c *gin.Context, message string) {
+	CommonJSON(c, http.StatusUnauthorized, message)
+}
+
 func InternalServerError(c *gin.Context, message string) {
 	CommonJSON(c, http.StatusInternalServerError, message)
 }
@@ -50,4 +57,11 @@ func HttpGet(url string) (res string, err error) {
 	body, err := ioutil.ReadAll(resp.Body)
 	res = string(body)
 	return
+}
+
+func GetMD5(inputStr string) string {
+	h := md5.New()
+	io.WriteString(h, inputStr)
+	md5Str := fmt.Sprintf("%x", h.Sum(nil))
+	return md5Str
 }

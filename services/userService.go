@@ -112,10 +112,11 @@ func LoginHandler(c *gin.Context) {
 	// c.JSON(http.StatusOK, gin.H{"status": "success", "user": resp})
 }
 
+// test check and parse token
 func UserInfoHandler(c *gin.Context) {
 	tokenString := c.GetHeader("Authorization")
 	if tokenString == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "没有提供令牌"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "no token"})
 		return
 	}
 
@@ -124,14 +125,15 @@ func UserInfoHandler(c *gin.Context) {
 	})
 
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "令牌无效"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "token invalid"})
 		return
 	}
 
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		username, _ := claims["username"].(string)
-		c.JSON(http.StatusOK, gin.H{"message": "访问受保护资源", "user": username})
+		fmt.Printf("%+v\n", claims)
+		userId := claims["user_id"]
+		c.JSON(http.StatusOK, gin.H{"message": "ok", "user_id": userId})
 	} else {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "令牌无效"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "token invalid"})
 	}
 }

@@ -23,7 +23,7 @@ func SetupRouter() *gin.Engine {
 	// todo 检查邮箱是否重复的接口
 	api.POST("/login", services.LoginHandler) //用户登录接口
 
-	// api.GET("/userinfo", services.UserInfoHandler)
+	api.GET("/userinfo", services.UserInfoHandler) //需要通过token验证
 
 	// group
 	r.GET("/groups", services.OpenGroups)           // 查看所有开放的组列表
