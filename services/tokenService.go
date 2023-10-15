@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func refreshTokenHandler(c *gin.Context) {
+func RefreshTokenHandler(c *gin.Context) {
 	oldTokenString := c.GetHeader("Authorization")
 
 	if oldTokenString == "" {
@@ -30,7 +30,7 @@ func refreshTokenHandler(c *gin.Context) {
 	claims, ok := oldToken.Claims.(jwt.MapClaims)
 	if ok && oldToken.Valid {
 		if exp, ok := claims["exp"].(float64); ok {
-			if int64(exp)-time.Now().Unix() > 60 { // 60秒内不自动刷新
+			if int64(exp)-time.Now().Unix() > 600 { // 临过期600s内才能刷新，否则不刷新
 				c.JSON(http.StatusOK, gin.H{"message": "令牌尚未过期"})
 				return
 			}
@@ -38,7 +38,9 @@ func refreshTokenHandler(c *gin.Context) {
 	}
 
 	// 如果旧令牌需要刷新，生成一个新令牌
-	if userId, ok := claims["user_id"].(int64); ok {
+	if userIdfloat, ok := claims["user_id"].(float64); ok {
+		// fmt.Printf("userId:%+v\n", userIdfloat)
+		userId := int64(userIdfloat)
 		newToken, err := createToken(userId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "无法创建新令牌"})

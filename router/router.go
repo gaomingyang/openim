@@ -21,10 +21,10 @@ func SetupRouter() *gin.Engine {
 	// apis
 	api.POST("/register", services.UserRegister) // 用户注册
 	// todo 检查邮箱是否重复的接口
-	api.POST("/login", services.LoginHandler) //用户登录接口
-	r.POST("/refreshToken", services.refreshTokenHandler)
+	api.POST("/login", services.LoginHandler) // 用户登录接口
+	api.POST("/refreshToken", services.RefreshTokenHandler)
 
-	api.GET("/userinfo", services.UserInfoHandler) //需要通过token验证
+	api.GET("/userinfo", services.UserInfoHandler) // 需要通过token验证
 
 	// group
 	r.GET("/groups", services.OpenGroups)           // 查看所有开放的组列表
@@ -39,7 +39,7 @@ func SetupRouter() *gin.Engine {
 	// friends
 	// r.GET("/my/friends")
 
-	r.LoadHTMLGlob("public/*")
+	r.LoadHTMLGlob("public/*.html")
 	r.GET("/manage", managePage)
 	r.GET("/chat", chatPage)
 	r.GET("/login", loginPage)

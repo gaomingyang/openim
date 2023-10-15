@@ -37,7 +37,7 @@ func main() {
 	// 	PORT = ":" + arguments[1]
 	// }
 
-	// 开启sockert server服务
+	// 开启socket server服务
 	// go im.StartSocketServer()
 	go ws.StartWsServer()
 
