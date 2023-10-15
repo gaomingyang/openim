@@ -9,6 +9,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// 刷新token。刷新后老的在有效期内也能继续用。
 func RefreshTokenHandler(c *gin.Context) {
 	oldTokenString := c.GetHeader("Authorization")
 
