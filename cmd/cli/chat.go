@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
+	"openim/internal/ws"
 	"strings"
-
-	"openim/ws"
 
 	"github.com/charmbracelet/bubbles/textarea"
 	"github.com/charmbracelet/bubbles/viewport"

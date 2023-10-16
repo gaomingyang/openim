@@ -3,10 +3,10 @@ package main
 import (
 	"flag"
 	"log"
-	"openim/config"
-	"openim/dao"
-	"openim/router"
-	"openim/ws"
+	"openim/internal/common/config"
+	"openim/internal/dao"
+	"openim/internal/routes"
+	"openim/internal/ws"
 	"os"
 
 	"github.com/spf13/viper"
@@ -41,6 +41,6 @@ func main() {
 	// go im.StartSocketServer()
 	go ws.StartWsServer()
 
-	r := router.SetupRouter()
+	r := routes.SetupRouter()
 	log.Fatal(r.Run(viper.GetString("apiPort"))) // listen and serve on 0.0.0.0:8080
 }

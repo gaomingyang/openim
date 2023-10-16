@@ -3,8 +3,8 @@ package services
 import (
 	"log"
 	"net/http"
-	"openim/common"
-	"openim/dao"
+	"openim/internal/common"
+	dao2 "openim/internal/dao"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -38,7 +38,7 @@ type ApplyToJoinGroupRequest struct {
 
 // all open groups
 func OpenGroups(c *gin.Context) {
-	groups, err := dao.OpenGroups()
+	groups, err := dao2.OpenGroups()
 	if err != nil {
 		common.InternalServerError(c, "get groups error")
 		return
@@ -52,7 +52,7 @@ func MyGroupList(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
 		return
 	}
-	groups, err := dao.UserGroupList(request.UserId)
+	groups, err := dao2.UserGroupList(request.UserId)
 	if err != nil {
 		log.Println("get group list err:", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "get group list error"})
@@ -67,7 +67,7 @@ func GroupInfo(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
 		return
 	}
-	group, err := dao.GroupInfo(request.Id)
+	group, err := dao2.GroupInfo(request.Id)
 	if err != nil {
 		log.Println("get group info err:", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "get group info error"})
@@ -82,7 +82,7 @@ func GroupMembers(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
 		return
 	}
-	groupMembers, err := dao.GetGroupMembers(request.GroupId)
+	groupMembers, err := dao2.GetGroupMembers(request.GroupId)
 	if err != nil {
 		log.Println("get group members err:", err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "get group members error"})
@@ -104,7 +104,7 @@ func CreateGroup(c *gin.Context) {
 		return
 	}
 
-	groupId, err := dao.GroupCreate(groupName)
+	groupId, err := dao2.GroupCreate(groupName)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "create group error"})
 		return
@@ -121,7 +121,7 @@ func ApplyJoinGroup(c *gin.Context) {
 		return
 	}
 	// 检查身份，判断是否是开放群、本人是否不在群里
-	group, err := dao.GroupInfo(request.GroupId)
+	group, err := dao2.GroupInfo(request.GroupId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -131,7 +131,7 @@ func ApplyJoinGroup(c *gin.Context) {
 		return
 	}
 
-	exist, err := dao.CheckExistGroupMember(request.GroupId, request.UserId)
+	exist, err := dao2.CheckExistGroupMember(request.GroupId, request.UserId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": err.Error()})
 		return
@@ -142,7 +142,7 @@ func ApplyJoinGroup(c *gin.Context) {
 	}
 
 	// 创建申请记录，并给组管理员发送消息
-	err = dao.ApplyJoinGroup(request.GroupId, request.UserId, request.Message)
+	err = dao2.ApplyJoinGroup(request.GroupId, request.UserId, request.Message)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "create group join info error"})
 		return

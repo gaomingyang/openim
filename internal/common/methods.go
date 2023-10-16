@@ -6,7 +6,7 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"openim/common/define"
+	"openim/internal/common/define"
 	"strings"
 
 	"github.com/gin-gonic/gin"

@@ -6,11 +6,10 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"openim/internal/services"
+	"openim/internal/ws"
 
 	"github.com/gorilla/websocket"
-
-	"openim/services"
-	"openim/ws"
 )
 
 var (

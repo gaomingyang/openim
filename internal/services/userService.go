@@ -4,15 +4,14 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"openim/common"
+	"openim/internal/common"
+	"openim/internal/dao"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/spf13/viper"
 
 	"github.com/gin-gonic/gin"
-
-	"openim/dao"
 )
 
 type RegisterRequest struct {

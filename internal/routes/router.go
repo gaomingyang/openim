@@ -1,14 +1,13 @@
-package router
+package routes
 
 import (
 	"fmt"
-	"log"
-	"net/http"
-	"openim/services"
-	"openim/ws"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"log"
+	"net/http"
+	services2 "openim/internal/services"
+	"openim/internal/ws"
 )
 
 func SetupRouter() *gin.Engine {
@@ -18,36 +17,35 @@ func SetupRouter() *gin.Engine {
 	r.GET("/ping", pong)
 
 	api := r.Group("/api")
-	// apis
-	api.POST("/register", services.UserRegister) // 用户注册
+	api.POST("/register", services2.UserRegister) // 用户注册
 	// todo 检查邮箱是否重复的接口
-	api.POST("/login", services.LoginHandler) // 用户登录接口
-	api.POST("/refreshToken", services.RefreshTokenHandler)
+	api.POST("/login", services2.LoginHandler) // 用户登录接口
+	api.POST("/refreshToken", services2.RefreshTokenHandler)
 
-	api.GET("/userinfo", services.UserInfoHandler) // 需要通过token验证
+	api.GET("/userinfo", services2.UserInfoHandler) // 需要通过token验证
 
 	// group
-	r.GET("/groups", services.OpenGroups)           // 查看所有开放的组列表
-	r.POST("/group/apply", services.ApplyJoinGroup) // 申请入群
-	r.GET("/my/group/list", services.MyGroupList)   // 查看自己的组列表
-	r.GET("/group/info", services.GroupInfo)        // 查看某个组的信息
-	r.GET("/group/members", services.GroupMembers)
-	r.POST("/group/create", services.CreateGroup)
-	r.POST("/group/join", services.JoinGroup)
-	r.POST("/group/quit", services.QuitGroup)
+	r.GET("/groups", services2.OpenGroups)           // 查看所有开放的组列表
+	r.POST("/group/apply", services2.ApplyJoinGroup) // 申请入群
+	r.GET("/my/group/list", services2.MyGroupList)   // 查看自己的组列表
+	r.GET("/group/info", services2.GroupInfo)        // 查看某个组的信息
+	r.GET("/group/members", services2.GroupMembers)
+	r.POST("/group/create", services2.CreateGroup)
+	r.POST("/group/join", services2.JoinGroup)
+	r.POST("/group/quit", services2.QuitGroup)
 
 	// friends
 	// r.GET("/my/friends")
 
-	r.LoadHTMLGlob("public/*.html")
+	r.LoadHTMLGlob("web/templates/*.html")
 	r.GET("/manage", managePage)
 	r.GET("/chat", chatPage)
 	r.GET("/login", loginPage)
 
 	// log.Println("Start web server with port number", *http_addr)
 	// http.HandleFunc("/version", version)
-	// // http.Handle("/", http.FileServer(http.Dir("./public")))  //根目录指向public
-	// http.Handle("/public/", http.StripPrefix("/public/", http.FileServer(http.Dir("./public"))))
+	// // http.Handle("/", http.FileServer(http.Dir("./web")))  //根目录指向public
+	// http.Handle("/web/", http.StripPrefix("/web/", http.FileServer(http.Dir("./web"))))
 	//
 	// // 开启web 聊天页面
 	// http.HandleFunc("/", home)
@@ -81,7 +79,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	http.ServeFile(w, r, "./public/home.html")
+	http.ServeFile(w, r, "./web/home.html")
 }
 
 // todo this page could use ws update number instead of refresh webpage by hand

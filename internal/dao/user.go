@@ -2,8 +2,8 @@ package dao
 
 import (
 	"errors"
-	"openim/common"
-	"openim/common/define"
+	"openim/internal/common"
+	"openim/internal/common/define"
 
 	_ "github.com/go-sql-driver/mysql"
 )

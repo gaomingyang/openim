@@ -2,7 +2,7 @@ package services
 
 import (
 	"gorm.io/gorm"
-	"openim/dao"
+	"openim/internal/dao"
 )
 
 // 注入一个db
