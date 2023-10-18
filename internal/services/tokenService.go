@@ -2,6 +2,7 @@ package services
 
 import (
 	"net/http"
+	"openim/internal/handlers"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -42,7 +43,7 @@ func RefreshTokenHandler(c *gin.Context) {
 	if userIdfloat, ok := claims["user_id"].(float64); ok {
 		// fmt.Printf("userId:%+v\n", userIdfloat)
 		userId := int64(userIdfloat)
-		newToken, err := createToken(userId)
+		newToken, err := handlers.createToken(userId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "无法创建新令牌"})
 			return

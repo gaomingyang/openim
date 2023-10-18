@@ -6,7 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	services2 "openim/internal/services"
+	"openim/internal/handlers"
+	"openim/internal/services"
 	"openim/internal/ws"
 )
 
@@ -17,22 +18,22 @@ func SetupRouter() *gin.Engine {
 	r.GET("/ping", pong)
 
 	api := r.Group("/api")
-	api.POST("/register", services2.UserRegister) // 用户注册
+	api.POST("/register", services.UserRegister) // 用户注册
 	// todo 检查邮箱是否重复的接口
-	api.POST("/login", services2.LoginHandler) // 用户登录接口
-	api.POST("/refreshToken", services2.RefreshTokenHandler)
+	api.POST("/login", handlers.LoginHandler) // 用户登录接口
+	api.POST("/refreshToken", services.RefreshTokenHandler)
 
-	api.GET("/userinfo", services2.UserInfoHandler) // 需要通过token验证
+	api.GET("/userinfo", handlers.UserInfoHandler) // 需要通过token验证
 
 	// group
-	r.GET("/groups", services2.OpenGroups)           // 查看所有开放的组列表
-	r.POST("/group/apply", services2.ApplyJoinGroup) // 申请入群
-	r.GET("/my/group/list", services2.MyGroupList)   // 查看自己的组列表
-	r.GET("/group/info", services2.GroupInfo)        // 查看某个组的信息
-	r.GET("/group/members", services2.GroupMembers)
-	r.POST("/group/create", services2.CreateGroup)
-	r.POST("/group/join", services2.JoinGroup)
-	r.POST("/group/quit", services2.QuitGroup)
+	r.GET("/groups", services.OpenGroups)           // 查看所有开放的组列表
+	r.POST("/group/apply", services.ApplyJoinGroup) // 申请入群
+	r.GET("/my/group/list", services.MyGroupList)   // 查看自己的组列表
+	r.GET("/group/info", services.GroupInfo)        // 查看某个组的信息
+	r.GET("/group/members", services.GroupMembers)
+	r.POST("/group/create", services.CreateGroup)
+	r.POST("/group/join", services.JoinGroup)
+	r.POST("/group/quit", services.QuitGroup)
 
 	// friends
 	// r.GET("/my/friends")
