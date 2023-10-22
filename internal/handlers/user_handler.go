@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"openim/internal/common"
 	"openim/internal/dao"
+	"strings"
 	"time"
 )
 
@@ -69,6 +70,9 @@ func UserInfoHandler(c *gin.Context) {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "no token"})
 		return
 	}
+
+	// 移除Bearer前缀，保留令牌部分
+	tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(viper.GetString("jwt.secretKey")), nil
