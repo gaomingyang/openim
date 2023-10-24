@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"openim/internal/handlers"
+	"openim/internal/middleware"
 	"openim/internal/services"
 	"openim/internal/ws"
 )
@@ -14,16 +15,22 @@ import (
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
 	corsMiddleWare := cors.Default()
+
+	// 通用中间件
 	r.Use(corsMiddleWare)
+	r.Use(middleware.RequestIDMiddleware())
+
 	r.GET("/ping", pong)
 
 	api := r.Group("/api")
 	api.POST("/register", services.UserRegister) // 用户注册
 	// todo 检查邮箱是否重复的接口
 	api.POST("/login", handlers.LoginHandler) // 用户登录接口
-	api.POST("/refreshToken", services.RefreshTokenHandler)
 
-	api.GET("/userinfo", handlers.UserInfoHandler) // 需要通过token验证
+	// 需要验证token的
+	authApi := api.Use(middleware.AuthMiddleware())
+	authApi.POST("/refreshToken", services.RefreshTokenHandler)
+	authApi.GET("/userinfo", handlers.UserInfoHandler) // 需要通过token验证
 
 	// group
 	r.GET("/groups", services.OpenGroups)           // 查看所有开放的组列表

@@ -3,6 +3,7 @@ package services
 import (
 	"net/http"
 	"openim/internal/handlers"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -12,14 +13,17 @@ import (
 
 // 刷新token。刷新后老的在有效期内也能继续用。
 func RefreshTokenHandler(c *gin.Context) {
-	oldTokenString := c.GetHeader("Authorization")
+	tokenString := c.GetHeader("Authorization")
 
-	if oldTokenString == "" {
+	if tokenString == "" {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "没有提供令牌"})
 		return
 	}
 
-	oldToken, err := jwt.Parse(oldTokenString, func(token *jwt.Token) (interface{}, error) {
+	// 移除Bearer前缀，保留令牌部分
+	tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
+
+	oldToken, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(viper.GetString("jwt.secretKey")), nil
 	})
 
@@ -43,7 +47,7 @@ func RefreshTokenHandler(c *gin.Context) {
 	if userIdfloat, ok := claims["user_id"].(float64); ok {
 		// fmt.Printf("userId:%+v\n", userIdfloat)
 		userId := int64(userIdfloat)
-		newToken, err := handlers.createToken(userId)
+		newToken, err := handlers.CreateToken(userId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "无法创建新令牌"})
 			return

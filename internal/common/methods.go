@@ -21,8 +21,10 @@ func MakeUuid() string {
 }
 
 func CommonJSON(c *gin.Context, code int, message string) {
+	traceID := c.MustGet("trace_id").(string)
 	c.JSON(http.StatusOK, define.Response{
 		Code:    code,
+		TraceID: traceID,
 		Message: message,
 	})
 }
@@ -42,6 +44,7 @@ func InternalServerError(c *gin.Context, message string) {
 func OK(c *gin.Context, data interface{}) {
 	c.JSON(http.StatusOK, define.Response{
 		Code:    define.SUCCESSCODE,
+		TraceID: c.MustGet("trace_id").(string),
 		Message: "success",
 		Data:    data,
 	})

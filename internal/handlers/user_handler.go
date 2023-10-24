@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/spf13/viper"
@@ -9,7 +8,6 @@ import (
 	"net/http"
 	"openim/internal/common"
 	"openim/internal/dao"
-	"strings"
 	"time"
 )
 
@@ -52,7 +50,7 @@ func LoginHandler(c *gin.Context) {
 		UserName: user.UserName,
 	}
 
-	token, err := createToken(user.Id)
+	token, err := CreateToken(user.Id)
 	if err != nil {
 		log.Println(err.Error())
 		common.InternalServerError(c, "internal error create user token failed")
@@ -65,34 +63,37 @@ func LoginHandler(c *gin.Context) {
 
 // test check and parse token
 func UserInfoHandler(c *gin.Context) {
-	tokenString := c.GetHeader("Authorization")
-	if tokenString == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "no token"})
-		return
-	}
+	// tokenString := c.GetHeader("Authorization")
+	// if tokenString == "" {
+	// 	c.JSON(http.StatusUnauthorized, gin.H{"error": "no token"})
+	// 	return
+	// }
 
 	// 移除Bearer前缀，保留令牌部分
-	tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
+	// tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
 
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		return []byte(viper.GetString("jwt.secretKey")), nil
-	})
+	// token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+	// 	return []byte(viper.GetString("jwt.secretKey")), nil
+	// })
 
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "token invalid"})
-		return
-	}
+	// if err != nil {
+	// 	c.JSON(http.StatusUnauthorized, gin.H{"error": "token invalid"})
+	// 	return
+	// }
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		fmt.Printf("%+v\n", claims)
-		userId := claims["user_id"]
-		c.JSON(http.StatusOK, gin.H{"message": "ok", "user_id": userId})
-	} else {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "token invalid"})
-	}
+	// if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+	// 	fmt.Printf("%+v\n", claims)
+	// 	userId := claims["user_id"]
+	// 	c.JSON(http.StatusOK, gin.H{"message": "ok", "user_id": userId})
+	// } else {
+	// 	c.JSON(http.StatusUnauthorized, gin.H{"error": "token invalid"})
+	// }
+
+	userID, _ := c.Get("user_id")
+	c.JSON(http.StatusOK, gin.H{"message": "ok", "the_user_id": userID})
 }
 
-func createToken(userId int64) (string, error) {
+func CreateToken(userId int64) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": userId,
 		"exp":     time.Now().Add(time.Hour).Unix(),
