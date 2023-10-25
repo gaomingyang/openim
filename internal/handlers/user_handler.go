@@ -3,10 +3,11 @@ package handlers
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"log"
 	"net/http"
 	"openim/internal/common"
+	"openim/internal/common/logger"
 	"openim/internal/dao"
 	"time"
 )
@@ -22,6 +23,12 @@ type LoginResponse struct {
 	Token    string `json:"token"`
 }
 
+var log *logrus.Logger
+
+func init() {
+	log = logger.Log
+}
+
 // login
 func LoginHandler(c *gin.Context) {
 	var login LoginRequest
@@ -30,6 +37,7 @@ func LoginHandler(c *gin.Context) {
 		// c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
 		return
 	}
+	log.Info("login receive:%+v", login)
 	// log.Printf("login params:%+v\n", login)
 	user, err := dao.UserLogin(login.UserName, login.Password)
 	// log.Printf("search user: %+v\n", user)
@@ -90,6 +98,7 @@ func UserInfoHandler(c *gin.Context) {
 	// }
 
 	userID, _ := c.Get("user_id")
+
 	c.JSON(http.StatusOK, gin.H{"message": "ok", "the_user_id": userID})
 }
 

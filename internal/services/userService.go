@@ -23,6 +23,8 @@ func UserRegister(c *gin.Context) {
 		return
 	}
 
+	// todo check email is same or not
+
 	// check same name
 	n, err := dao.UserFindByName(register.UserName)
 	if err != nil {

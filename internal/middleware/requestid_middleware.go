@@ -18,6 +18,11 @@ func RequestIDMiddleware() gin.HandlerFunc {
 		// 将trace_id添加到上下文中，以便后续处理程序可以访问它
 		c.Set("trace_id", traceID)
 
+		method := c.Request.Method
+		log.Printf("request method: %s\n", method)
+
+		// 根据请求方式，记录header和参数
+
 		// 打印请求日志，包括trace_id
 		log.Printf("Incoming Request - trace_id: %s", traceID)
 

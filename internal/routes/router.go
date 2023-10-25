@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	"log"
 	"net/http"
 	"openim/internal/handlers"
 	"openim/internal/middleware"
 	"openim/internal/services"
 	"openim/internal/ws"
+	"time"
 )
 
 func SetupRouter() *gin.Engine {
@@ -65,6 +67,27 @@ func SetupRouter() *gin.Engine {
 	// 	fmt.Println(err)
 	// }
 	return r
+}
+func LogrusLogger(log *logrus.Logger) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// 开始时间
+		start := time.Now()
+
+		// 处理请求
+		c.Next()
+
+		// 结束时间
+		end := time.Now()
+
+		// 记录请求日志
+		log.WithFields(logrus.Fields{
+			"request_id": c.MustGet("request_id"),
+			"method":     c.Request.Method,
+			"path":       c.Request.URL.Path,
+			"status":     c.Writer.Status(),
+			"duration":   end.Sub(start),
+		}).Info("Request processed")
+	}
 }
 
 func pong(c *gin.Context) {
