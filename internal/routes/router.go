@@ -52,6 +52,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/chat", chatPage)
 	r.GET("/login", loginPage)
 	r.GET("/home", homePage)
+	r.GET("/", indexPage)
 
 	// log.Println("Start web server with port number", *http_addr)
 	// http.HandleFunc("/version", version)
@@ -117,6 +118,11 @@ func home(w http.ResponseWriter, r *http.Request) {
 func homePage(c *gin.Context) {
 
 	c.HTML(http.StatusOK, "home.html", nil)
+}
+
+func indexPage(c *gin.Context) {
+
+	c.HTML(http.StatusOK, "index.html", nil)
 }
 
 // todo this page could use ws update number instead of refresh webpage by hand
