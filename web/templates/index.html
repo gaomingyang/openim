@@ -6,10 +6,26 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>OpenIM index</title>
+    <script>
+        // 页面加载时自动执行的JavaScript
+        window.onload = function () {
+            // 检查localStorage中是否存在指定的键
+            let token = localStorage.getItem('token')
+            console.log(token);
+            if (token === null || token === undefined) {
+                // 如果localStorage中不存在 'myKey'，执行跳转操作
+                window.location.href = '/login';
+            } else {
+                // 如果存在 'myKey'，可以执行其他操作，或者不执行任何操作
+                window.location.href = '/home';
+            }
+        }
+    </script>
 </head>
 <body>
 <h3>Open IM Demo Site</h3>
 
+<p style="display: none"> 功能介绍、登录注册</p>
 
 </body>
 </html>

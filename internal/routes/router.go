@@ -51,6 +51,7 @@ func SetupRouter() *gin.Engine {
 	r.GET("/manage", managePage)
 	r.GET("/chat", chatPage)
 	r.GET("/login", loginPage)
+	r.GET("/signup", signupPage)
 	r.GET("/home", homePage)
 	r.GET("/", indexPage)
 
@@ -139,4 +140,7 @@ func chatPage(c *gin.Context) {
 
 func loginPage(c *gin.Context) {
 	c.HTML(http.StatusOK, "login.html", nil)
+}
+func signupPage(c *gin.Context) {
+	c.HTML(http.StatusOK, "signup.html", nil)
 }
