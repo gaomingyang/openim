@@ -1,0 +1,32 @@
+name: Deploy To Aws EC2
+
+on:
+  #Triggers the workflow on push only for the "main" branch
+  push:
+    branches:
+      - main
+  #Allows run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.20
+
+      - name: Build binary
+        run: make build
+#  deploy:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Setup SSH
+#        uses: webfactory/ssh-agent@v0.8.0
+#        with:
+#          ssh-private-key: ${{ secrets.SSH_EC2_PRIVATE_KEY }}
+
