@@ -19,10 +19,10 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: 1.20
+          go-version: 1.x
 
       - name: Build binary
-        run: go --version
+        run: make build
 #        run: make build
 #  deploy:
 #    runs-on: ubuntu-latest
