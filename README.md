@@ -1,3 +1,5 @@
+[![Build Status](https://github.com/gaomingyang/openim/workflows/Build and Deploy To Aws EC2/badge.svg)](https://github.com/gaomingyang/openim/actions)
+
 # Open IM
 An Opensource Instant Messaging System.  
 You can deploy it privately to enhance communication security.
