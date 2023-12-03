@@ -1,4 +1,4 @@
-name: Build and Deploy To Aws EC2
+name: Build and Deploy To EC2
 
 on:
   #Triggers the workflow on push only for the "master/main" branch
