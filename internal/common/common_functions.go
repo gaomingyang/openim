@@ -4,7 +4,6 @@ import (
 	"crypto/md5"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"openim/internal/common/define"
 	"strings"
@@ -57,7 +56,7 @@ func HttpGet(url string) (res string, err error) {
 	}
 
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	res = string(body)
 	return
 }
