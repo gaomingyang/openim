@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      ENVIRONMENT: development
+      ENVIRONMENT: DEVELOPMENT
 
     needs:
       - build
