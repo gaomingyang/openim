@@ -28,7 +28,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: openim
-          path: .
+          path: ./openim
 
 #  test:
 #    runs-on: ubuntu-latest
@@ -66,9 +66,8 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ls
           scp ./openim ${{ steps.ssh-server.outputs.SERVER }}:/var/www/openim
-          ssh ${{ steps.ssh-server.outputs.SERVER }} 'touch /var/www/openim/a.md && echo "hello world" '
+          ssh ${{ steps.ssh-server.outputs.SERVER }} 'touch /var/www/openim/bbb '
 
 #          ssh ec2-user@3.15.217.204 'cd /var/www/openim && touch test.md'
 
