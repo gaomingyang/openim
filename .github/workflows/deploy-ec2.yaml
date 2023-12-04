@@ -62,4 +62,4 @@ jobs:
       - name: Deploy to EC2
         run: |
           scp ./openim ${{ steps.ssh-server.outputs.SERVER }}:/var/www/openim
-          ssh ${{ steps.ssh-server.outputs.SERVER }} 'touch /var/www/openim/bbb && supervisorctl start random_quote_picture'
+          ssh ${{ steps.ssh-server.outputs.SERVER }} 'sudo supervisorctl start random_quote_picture'
