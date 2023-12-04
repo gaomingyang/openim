@@ -52,7 +52,7 @@ jobs:
 
       - name: Setup SSH
         id: ssh-server
-        uses: gaomingyang/ssh-github-action@latest
+        uses: gaomingyang/ssh-github-action@main
         with:
 #          SERVER_NAME: myaws
           SSH_USER: ec2-user
