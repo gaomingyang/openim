@@ -35,9 +35,13 @@ jobs:
 
     env:
       ENVIRONMENT: DEVELOPMENT
+      
     needs:
       - build
     steps:
+      - name: list files
+        run: ls
+
       - name: Setup SSH
         id: ssh-server
         uses: invi5H/ssh-action@v1
