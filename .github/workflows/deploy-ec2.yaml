@@ -42,7 +42,8 @@ jobs:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.8.0
         with:
-          ssh-private-key: ${{ secrets["SSH_EC2_PRIVATE_KEY_" + env.ENVIRONMENT] }}
+          ssh-private-key: ${{ secrets[format('SSH_EC2_PRIVATE_KEY_{0}', env.ENVIRONMENT)] }}
+
 
       - name: Deploy to EC2
         run: scp openim ec2-user@ec2-3-15-217-204.us-east-2.compute.amazonaws.com:/var/www/openim
