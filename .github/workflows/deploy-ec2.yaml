@@ -35,9 +35,8 @@ jobs:
 
     env:
       ENVIRONMENT: DEVELOPMENT
-
-    needs:
-      - build
+#    needs:
+#      - build
     steps:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.8.0
