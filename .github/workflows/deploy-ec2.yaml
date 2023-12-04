@@ -35,8 +35,8 @@ jobs:
 
     env:
       ENVIRONMENT: DEVELOPMENT
-#    needs:
-#      - build
+    needs:
+      - build
     steps:
       - name: Setup SSH
         id: ssh-server
