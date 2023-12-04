@@ -10,19 +10,19 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: 1.x
-
-      - name: Build binary
-        run: make build
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout repository
+#        uses: actions/checkout@v4
+#
+#      - name: Set up Go
+#        uses: actions/setup-go@v4
+#        with:
+#          go-version: 1.x
+#
+#      - name: Build binary
+#        run: make build
 
 #  test:
 #    runs-on: ubuntu-latest
@@ -47,7 +47,11 @@ jobs:
 
 
       - name: Deploy to EC2
-        run: scp openim ec2-user@ec2-3-15-217-204.us-east-2.compute.amazonaws.com:/var/www/openim
+        run: |
+          ssh ec2-user@ec2-3-15-217-204.us-east-2.compute.amazonaws.com
+          cd /var/www/openim
+          touch test.md
+#        run: scp openim ec2-user@ec2-3-15-217-204.us-east-2.compute.amazonaws.com:/var/www/openim
 #        run: scp openim ec2-user@ec2-3-15-217-204.us-east-2.compute.amazonaws.com:/var/www/openim
 #        run: |
 #        #send file to EC2 server by scp
