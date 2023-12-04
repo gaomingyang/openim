@@ -24,6 +24,12 @@ jobs:
       - name: Build binary
         run: make build
 
+      - name: Upload the artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: openim
+          path: .
+
 #  test:
 #    runs-on: ubuntu-latest
 #    steps:
@@ -38,6 +44,14 @@ jobs:
     needs:
       - build
     steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: openim
+
+      - name: list files
+        run: ls
+
       - name: Setup SSH
         id: ssh-server
         uses: invi5H/ssh-action@v1
