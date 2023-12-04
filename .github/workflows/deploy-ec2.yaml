@@ -38,17 +38,17 @@ jobs:
 #    needs:
 #      - build
     steps:
-      - name: Setup SSH`
-        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+      - name: Setup SSH
+        id: ssh-server
+        uses: invi5H/ssh-action@v1
         with:
-          host: 3.15.217.204
-          user: ec2-user
-          key: ${{ secrets.SSH_EC2_PRIVATE_KEY }}
+          SSH_HOST: 3.15.217.204
+          SSH_PORT: 22
+          SSH_USER: ec2-user
+          SSH_KEY: ${{ secrets.SSH_EC2_PRIVATE_KEY }}
 #          ssh-private-key: ${{ secrets[format('SSH_EC2_PRIVATE_KEY_{0}', env.ENVIRONMENT)] }}
 #          ssh-private-key: ${{ secrets.SSH_EC2_PRIVATE_KEY }}
-          first_ssh: |
-            cd /var/www/openim
-            touch t.md
+        run: ssh ${{ steps.ssh-server.outputs.SERVER }} touch /var/www/openim/a.md
 
 #      - name: Deploy to EC2
 #        run: |
