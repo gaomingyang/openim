@@ -52,7 +52,7 @@ jobs:
 
       - name: Setup SSH
         id: ssh-server
-        uses: invi5H/ssh-action@v1
+        uses: gaomingyang/ssh-github-action@latest
         with:
           SSH_HOST: 3.15.217.204
           SSH_PORT: 22
