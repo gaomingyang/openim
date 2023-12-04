@@ -42,7 +42,8 @@ jobs:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.8.0
         with:
-          ssh-private-key: ${{ secrets[format('SSH_EC2_PRIVATE_KEY_{0}', env.ENVIRONMENT)] }}
+#          ssh-private-key: ${{ secrets[format('SSH_EC2_PRIVATE_KEY_{0}', env.ENVIRONMENT)] }}
+          ssh-private-key: ${{ secrets.SSH_EC2_PRIVATE_KEY }}
 
 
       - name: Deploy to EC2
