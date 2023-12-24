@@ -6,10 +6,19 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>sign up</title>
+    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 </head>
 <body>
 <h1>Sign up</h1>
 
+<form action="/api/signup" method="POST">
+    name:<input type="text" name="name"> <br>
+    email:<input type="text" name="email"> <br>
+    password:<input type="text" name="password"> <br>
+    <div class="g-recaptcha" data-sitekey="6LdJuzkpAAAAAIM62UrX5aCy4FANhoXzu56GgaWA" data-action="LOGIN"></div>
+    <button type="submit">submit</button>
+
+</form>
 
 </body>
 </html>
