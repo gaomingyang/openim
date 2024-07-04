@@ -5,6 +5,7 @@ import (
 	"log"
 	"openim/internal/common/config"
 	"openim/internal/dao"
+	"openim/internal/logger"
 	"openim/internal/routes"
 	"openim/internal/ws"
 	"os"
@@ -29,6 +30,9 @@ func init() {
 }
 
 func main() {
+	defer logger.Sync()
+
+	logger.Logger.Info("Application started")
 
 	// 另一种方式，从命令行参数获取
 	// PORT := ":8001"
@@ -41,6 +45,13 @@ func main() {
 	// go im.StartSocketServer()
 	go ws.StartWsServer()
 
+	//go testLog()
+
 	r := routes.SetupRouter()
 	log.Fatal(r.Run(viper.GetString("apiPort"))) // listen and serve on 0.0.0.0:8080
+}
+func testLog() {
+	for i := 0; i < 10000; i++ {
+		logger.Logger.Info("testLogASDFASDFASDASDFASDFASDFASDFASDFASDFDDDDDDDDDDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASFDSASDFASDFASDAFDA")
+	}
 }

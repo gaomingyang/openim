@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"openim/internal/common"
+	"openim/internal/logger"
 	"time"
 )
 
@@ -21,6 +22,7 @@ var upgrader = websocket.Upgrader{
 }
 
 func StartWsServer() {
+	logger.Logger.Info("start ws server")
 	http.HandleFunc("/ws", socketHandler)
 	port := viper.GetString("wsPort")
 	// port = ":6666"
