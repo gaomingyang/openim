@@ -21,8 +21,9 @@
     </style>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container">
     <h3 style="text-align: center;margin-top: 20px;">Open IM</h3>
+    <p class="text-md-end"><a href="javascript:exit();" >Exit</a></p>
     <div class="row justify-content-center">
         <div class="col-md-6 ">
             <p>Chat</p>
@@ -31,7 +32,7 @@
 
             <div class="row">
                 <div class="col-md-3">
-                    Name:<input type="text" class="form-control" id="user" placeholder="user name" value=""> &nbsp;
+                    Nick Name:<input type="text" class="form-control" id="user" placeholder="user name" value=""> &nbsp;
                 </div>
                 <div class="col-md-9">
                     Message:<input type="text" class="form-control" id="message"  placeholder="Message content ">
@@ -50,6 +51,7 @@
 
 
 <script type="text/javascript">
+
     function GetQueryString(name)
     {
         var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
@@ -106,6 +108,15 @@
         document.getElementById('content').innerHTML="浏览器不支持WebSocket";
         console.log("浏览器不支持WebSocket");
     }
+
+    function exit() {
+        webSocket.close()
+        localStorage.removeItem("username");
+        localStorage.removeItem("token");
+        window.location.href = "/";
+    }
+
+   
 </script>
 
 </body>

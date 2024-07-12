@@ -2,9 +2,6 @@ package routes
 
 import (
 	"fmt"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 	"log"
 	"net/http"
 	"openim/internal/handlers"
@@ -12,6 +9,10 @@ import (
 	"openim/internal/services"
 	"openim/internal/ws"
 	"time"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 )
 
 func SetupRouter() *gin.Engine {
@@ -130,6 +131,10 @@ func indexPage(c *gin.Context) {
 func managePage(c *gin.Context) {
 	onlineUserNumber := ws.GetOnlineUserNumber()
 	log.Println("online UserNumber:", onlineUserNumber)
+
+	users := ws.GetOnlineUserList()
+	log.Println(users)
+
 	c.HTML(http.StatusOK, "manage.html", gin.H{"onlineUserNumber": onlineUserNumber})
 }
 

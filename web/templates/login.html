@@ -68,6 +68,13 @@
 </main>
 
 <script>
+    $(document).ready(function() {
+        $('#userName, #password').on('keypress', function(event) {
+            if (event.keyCode === 13) {
+                $('#submit').click();
+            }
+        });
+    });
     function login() {
         console.log("click login");
        var user_name = $("#userName").val();
@@ -95,6 +102,8 @@
                 // window.location.href="http://127.0.0.1:8888/chat?user_name="+username;
                 // window.location.href="http://127.0.0.1:8888/chat";
                 window.location.href="/home"
+            }else{
+                alert(res.message);
             }
         });
         posting.fail(function(xhr,status,error){

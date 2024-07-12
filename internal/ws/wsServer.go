@@ -2,13 +2,14 @@ package ws
 
 import (
 	"encoding/json"
-	"github.com/gorilla/websocket"
-	"github.com/spf13/viper"
 	"log"
 	"net/http"
 	"openim/internal/common"
 	"openim/internal/logger"
 	"time"
+
+	"github.com/gorilla/websocket"
+	"github.com/spf13/viper"
 )
 
 // var upgrader = websocket.Upgrader{} // use default options
@@ -50,7 +51,7 @@ var Conns ConnMap
 
 func init() {
 	Conns = ConnMap{
-		Conn:      make(map[string]*websocket.Conn),
+		Conn:      make(map[string]*websocket.Conn, 0),
 		WriteChan: make(chan []byte, 500),
 	}
 }
@@ -69,6 +70,7 @@ func socketHandler(w http.ResponseWriter, r *http.Request) {
 
 	// get parameters
 	id := r.URL.Query().Get("id")
+	log.Println("CONN ID:", id)
 	if id != "" {
 		log.Println("get parameter ws conn id:", id)
 		connId = id
@@ -171,4 +173,11 @@ func write() {
 
 func GetOnlineUserNumber() int {
 	return len(Conns.Conn)
+}
+func GetOnlineUserList() []string {
+	var result []string
+	for k, _ := range Conns.Conn {
+		result = append(result, k)
+	}
+	return result
 }

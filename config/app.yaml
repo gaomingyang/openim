@@ -16,7 +16,7 @@ mysql: "root:root1234@tcp(127.0.0.1:3306)/openim?charset=utf8mb4&parseTime=True&
 log:
   level: "debug"
   encoding: "json"
-  outPut: "log/zap.log"
+  outPut: "./log/zap.log"
   maxSize: 1  #Mb
   maxBackups: 10
   maxAge: 30
