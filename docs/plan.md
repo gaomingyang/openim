@@ -14,3 +14,5 @@ facebook也有这样的产品 参考 https://sportcalgary.ca/sport-directory
 
 竞品：
 https://gitee.com/xchao/j-im
+https://gitee.com/explore/im
+https://gitee.com/hejiale010426/chat

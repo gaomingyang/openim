@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"openim/internal/common/define"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -49,16 +50,58 @@ func OK(c *gin.Context, data interface{}) {
 	})
 }
 
-func HttpGet(url string) (res string, err error) {
-	resp, err := http.Get(url)
+func HttpGet(url string) (res []byte, err error) {
+	client := &http.Client{Timeout: time.Second * 10} // 设置10秒超时
+	resp, err := client.Get(url)
 	if err != nil {
-		return
+		return res, fmt.Errorf("HTTP GET request failed: %v", err)
 	}
 
 	defer resp.Body.Close()
+
 	body, err := io.ReadAll(resp.Body)
-	res = string(body)
-	return
+	if err != nil {
+		return res, fmt.Errorf("failed to read response body: %v", err)
+	}
+	return body, nil
+}
+
+func HttpGetWithHeader(url string, header map[string]string) (res []byte, err error) {
+	// Create a new HTTP client
+	client := &http.Client{}
+
+	// Create a new HTTP request
+	req, err := http.NewRequest("GET", url, nil)
+	if err != nil {
+		fmt.Println("Error creating request:", err)
+		return
+	}
+
+	// Set custom headers
+	for k, h := range header {
+		//log.Println("set header:", k, ":", h)
+		req.Header.Set(k, h)
+	}
+
+	// Set cookies
+	//req.AddCookie(&http.Cookie{Name: "cookie_name", Value: "cookie_value"})
+
+	// Send the HTTP request
+	resp, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error sending request:", err)
+		return
+	}
+	defer resp.Body.Close()
+
+	// Read the response body
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println("Error reading response body:", err)
+	}
+	//log.Println("response:", string(body))
+
+	return body, err
 }
 
 func GetMD5(inputStr string) string {
