@@ -4,6 +4,11 @@
 用户账号体系
 
 先开发一个demo，再封装api和sdk
+发送文字、表情、图片、文件等功能。
+
+支持发送提醒
+
+接入ai服务。
 
 历史消息功能
 
@@ -13,6 +18,7 @@ facebook也有这样的产品 参考 https://sportcalgary.ca/sport-directory
 
 引入wire
 引入zip、分卷功能
+
 
 竞品：
 https://gitee.com/xchao/j-im
