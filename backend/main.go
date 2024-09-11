@@ -50,8 +50,9 @@ func main() {
 	r := routes.SetupRouter()
 	log.Fatal(r.Run(viper.GetString("apiPort"))) // listen and serve on 0.0.0.0:8080
 }
-func testLog() {
-	for i := 0; i < 10000; i++ {
-		logger.Logger.Info("testLogASDFASDFASDASDFASDFASDFASDFASDFASDFDDDDDDDDDDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASFDSASDFASDFASDAFDA")
-	}
-}
+
+// func testLog() {
+// 	for i := 0; i < 10000; i++ {
+// 		logger.Logger.Info("testLogASDFASDFASDASDFASDFASDFASDFASDFASDFDDDDDDDDDDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASDFASFDSASDFASDFASDAFDA")
+// 	}
+// }

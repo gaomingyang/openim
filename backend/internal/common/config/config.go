@@ -34,7 +34,7 @@ func Init(workpath string, environment string) {
 		log.Println("empty env,use default")
 		configFileName = "app.yaml"
 	}
-	configPath := filepath.Join(workpath, "config", configFileName)
+	configPath := filepath.Join(workpath, "conf", configFileName)
 	// log.Println("configPath:", configPath)
 	err := initConfig(configPath)
 	if err != nil {
