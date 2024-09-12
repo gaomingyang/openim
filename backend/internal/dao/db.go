@@ -30,6 +30,7 @@ func InitDB() {
 			Logger: gormLogger,
 		})
 		if err != nil {
+			log.Println("connect to database error", err.Error())
 			panic(err)
 		}
 		// 连接池
