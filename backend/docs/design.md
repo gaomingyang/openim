@@ -26,3 +26,4 @@ Only after add each other as friends, can user send message to other one-to-one
 
 
 sdk develop
+dev document
