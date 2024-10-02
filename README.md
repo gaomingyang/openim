@@ -6,19 +6,24 @@
 An Opensource Instant Messaging System.  
 You can deploy it privately to enhance communication security.
 
+**development run**
+```
+cd backend
+go run cmd/server/main.go
+```
+
+
 ## Deploy
 
 **Compile and run**
 ```
+cd backend
 go mod init openim
 go build -o openim main.go
 ./openim
 ```
 
-**development run**
-```
-go run main.go
-```
+
 
 **Compile it into an executable file for a Linux server.**
 ```

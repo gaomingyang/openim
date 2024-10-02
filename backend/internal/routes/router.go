@@ -48,13 +48,13 @@ func SetupRouter() *gin.Engine {
 	// friends
 	// r.GET("/my/friends")
 
-	r.LoadHTMLGlob("web/templates/*.html")
-	r.GET("/manage", managePage)
-	r.GET("/chat", chatPage)
-	r.GET("/login", loginPage)
-	r.GET("/signup", signupPage)
-	r.GET("/home", homePage)
-	r.GET("/", indexPage)
+	// r.LoadHTMLGlob("web/templates/*.html")
+	// r.GET("/manage", managePage)
+	// r.GET("/chat", chatPage)
+	// r.GET("/login", loginPage)
+	// r.GET("/signup", signupPage)
+	// r.GET("/home", homePage)
+	// r.GET("/", indexPage)
 
 	// log.Println("Start web server with port number", *http_addr)
 	// http.HandleFunc("/version", version)
