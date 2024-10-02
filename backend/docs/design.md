@@ -25,4 +25,9 @@ Only after add each other as friends, can user send message to other one-to-one
 
 
 
+
 db move to server
+
+sdk develop
+dev document
+
