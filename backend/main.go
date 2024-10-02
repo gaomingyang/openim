@@ -19,6 +19,7 @@ func init() {
 	log.SetPrefix("[LOG] ")
 	log.SetFlags(log.Lshortfile | log.Lmicroseconds | log.Ldate)
 
+	// init config
 	env := flag.String("env", "", "environment")
 	flag.Parse()
 	workPath, err := os.Getwd()
@@ -26,6 +27,8 @@ func init() {
 		panic(err)
 	}
 	config.Init(workPath, *env)
+
+	// inititial database connection
 	dao.InitDB()
 }
 
