@@ -1,3 +1,6 @@
 # frontend
 this is frontend demo of openim
-use react?
+
+use react
+
+front end sdk
