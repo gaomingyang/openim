@@ -31,7 +31,7 @@ func Init(workpath string, environment string) {
 	case "online":
 		configFileName = "app_online.yaml"
 	default:
-		log.Println("empty env,use default")
+		log.Println("empty env,use default file app.yaml")
 		configFileName = "app.yaml"
 	}
 	configPath := filepath.Join(workpath, "conf", configFileName)

@@ -9,7 +9,7 @@ You can deploy it privately to enhance communication security.
 **development run**
 ```
 cd backend
-go run cmd/server/main.go
+go run main.go
 ```
 
 
