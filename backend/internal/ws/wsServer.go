@@ -35,10 +35,10 @@ func StartWsServer() {
 }
 
 type Message struct {
-	// UserId   int    `json:"id"`
-	// TargetType string `target_type`
-	UserName string `json:"user_name"`
-	Content  string `json:"content"`
+	UserId     int    `json:"id"`
+	TargetType string `json:target_type`
+	UserName   string `json:"user_name"`
+	Content    string `json:"content"`
 }
 
 // 全局公共的
