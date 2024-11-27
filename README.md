@@ -33,6 +33,8 @@ CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o openim main.go
 ```
 
 **APIs**
+<!--
 * http://127.0.0.1:8888/register
 * http://127.0.0.1:8888/login
 * ws://127.0.0.1:8888/ws
+-->
