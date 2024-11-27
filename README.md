@@ -1,7 +1,9 @@
 
 
 # Open IM
+<!--
 [![Build and Deploy Status](https://github.com/gaomingyang/openim/workflows/Build%20and%20Deploy%20To%20EC2/badge.svg)](https://github.com/gaomingyang/openim/actions)
+-->
 
 An Opensource Instant Messaging System.  
 You can deploy it privately to enhance communication security.
