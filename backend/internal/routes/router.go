@@ -94,6 +94,7 @@ func LogrusLogger(log *logrus.Logger) gin.HandlerFunc {
 	}
 }
 
+// test service available
 func pong(c *gin.Context) {
 	// c.String(200, "pong")
 	c.JSON(200, gin.H{"message": "pong"})
