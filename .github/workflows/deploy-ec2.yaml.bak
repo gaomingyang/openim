@@ -1,11 +1,9 @@
 name: Build and Deploy To EC2
 
 on:
-  #Triggers the workflow on push only for the "master/main" branch
   push:
     branches:
       - master
-      - main
   #Allows run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -63,4 +61,4 @@ jobs:
       - name: Deploy to EC2
         run: |
           scp ./openim ${{ steps.ssh-server.outputs.SERVER_NAME }}:/var/www/openim
-          ssh ${{ steps.ssh-server.outputs.SERVER_NAME }} 'sudo supervisorctl start random_quote_picture'
+          ssh ${{ steps.ssh-server.outputs.SERVER_NAME }} 'sudo supervisorctl start openim'
