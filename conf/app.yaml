@@ -1,16 +1,16 @@
-#本websocket节点监听地址
+# WebSocket server listen address
 wsPort: ":8899"
 
 apiPort: ":8888"
 
-#和前端jwt通讯
+# JWT secret for frontend communication
 jwt:
   secretKey: "Nalz5czLed"
 
-#是否开启ws接口验签 true/false
+# Enable WS API signature verification (true/false)
 checkSign: false
 
-#本地调试数据库
+# Server SideMySQL connection string
 mysql: "root:root1234@tcp(127.0.0.1:3306)/openim?charset=utf8mb4&parseTime=True&loc=Local"
 
 log:

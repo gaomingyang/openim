@@ -37,7 +37,7 @@ func LoginHandler(c *gin.Context) {
 		// c.JSON(http.StatusBadRequest, gin.H{"status": "error", "message": "parameters error"})
 		return
 	}
-	log.Info("login receive:%+v", login)
+	log.Infof("login receive:%+v", login)
 	// log.Printf("login params:%+v\n", login)
 	user, err := dao.UserLogin(login.UserName, login.Password)
 	// log.Printf("search user: %+v\n", user)
