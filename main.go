@@ -37,6 +37,8 @@ func main() {
 
 	logger.Logger.Info("Application started")
 
+	// 从配置文件获取端口号,若没有,使用默认端口号
+
 	// 另一种方式，从命令行参数获取
 	// PORT := ":8001"
 	// arguments := os.Args

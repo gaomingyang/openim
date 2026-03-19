@@ -1,36 +1,44 @@
+# Open IM（后端）
 
-
-# Open IM
 [![Build and Deploy Status](https://github.com/gaomingyang/openim/workflows/Build%20and%20Deploy%20To%20EC2/badge.svg)](https://github.com/gaomingyang/openim/actions)
 
-An Opensource Instant Messaging System.  
-You can deploy it privately to enhance communication security.
+开源即时通讯系统后端。可私有化部署以提升通信安全。
 
-**development run**
-```
-cd backend
+本仓库仅包含后端代码，前端已独立至单独仓库。
+
+## 开发运行
+
+```bash
 go run main.go
 ```
 
+或使用脚本：
 
-## Deploy
-
-**Compile and run**
+```bash
+./run.sh
 ```
-cd backend
-go mod init openim
+
+## 部署
+
+**编译并运行**
+
+```bash
 go build -o openim main.go
 ./openim
 ```
 
+**交叉编译为 Linux 可执行文件**
 
-
-**Compile it into an executable file for a Linux server.**
-```
+```bash
+make build
+# 或
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o openim main.go
 ```
 
-**APIs**
-* http://127.0.0.1:8888/register
-* http://127.0.0.1:8888/login
-* ws://127.0.0.1:8888/ws
+## API
+
+- `http://127.0.0.1:8888/api/register` 注册
+- `http://127.0.0.1:8888/api/login` 登录
+- `ws://127.0.0.1:8888/ws` WebSocket
+
+更多接口见代码与 `docs/`。
